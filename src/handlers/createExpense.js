@@ -1,4 +1,5 @@
 import createHttpError from "http-errors";
+import { ObjectId } from "mongoDb";
 import { commonMiddleware } from "../middlewares";
 
 async function createExpense(event, context) {
@@ -31,7 +32,7 @@ async function createExpense(event, context) {
   try {
     result = await db.collection("expenses").insertOne({
       amount: numberAmount,
-      person,
+      person: ObjectId(person),
       reason,
       spendAt: spendAt || new Date(),
       createdAt,
