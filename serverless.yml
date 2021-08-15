@@ -1,0 +1,56 @@
+service: roomies-expenses-service
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 512
+  stage: ${opt:stage, 'dev'}
+  lambdaHashingVersion: 20201221
+  region: eu-central-1
+
+functions:
+  count:
+    handler: src/handlers/count.handler
+    events:
+      - http:
+          method: GET
+          path: /count
+
+  expenseReasons:
+    handler: src/handlers/expenseReasons.handler
+    events:
+      - http:
+          method: GET
+          path: /expenseReasons
+
+  users:
+    handler: src/handlers/users.handler
+    events:
+      - http:
+          method: GET
+          path: /users
+
+  totals:
+    handler: src/handlers/totals.handler
+    events:
+      - http:
+          method: GET
+          path: /totals
+
+  expensesPaged:
+    handler: src/handlers/expensesPaged.handler
+    events:
+      - http:
+          method: GET
+          path: /expensesPaged
+
+  createExpense:
+    handler: src/handlers/createExpense.handler
+    events:
+      - http:
+          method: POST
+          path: /createExpense
