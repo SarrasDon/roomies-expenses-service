@@ -41,6 +41,13 @@ functions:
           method: GET
           path: /totals
 
+  expensesMonthly:
+    handler: src/handlers/expensesMonthly.handler
+    events:
+      - http:
+          method: GET
+          path: /expensesMonthly
+
   expensesPaged:
     handler: src/handlers/expensesPaged.handler
     events:

@@ -33,8 +33,8 @@ async function createExpense(event, context) {
     result = await db.collection("expenses").insertOne({
       amount: numberAmount,
       person: ObjectId(person),
-      reason,
-      spendAt: spendAt || new Date(),
+      reason: ObjectId(reason),
+      spendAt: new Date(spendAt) || new Date(),
       createdAt,
     });
     if (!result || !result.insertedId) {
