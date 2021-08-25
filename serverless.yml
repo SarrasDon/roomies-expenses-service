@@ -61,3 +61,10 @@ functions:
       - http:
           method: POST
           path: /createExpense
+
+  deleteExpense:
+    handler: src/handlers/deleteExpense.handler
+    events:
+      - http:
+          method: DELETE
+          path: /deleteExpense/{id}
