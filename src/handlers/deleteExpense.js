@@ -1,4 +1,3 @@
-import createHttpError from "http-errors";
 import { commonMiddleware } from "../middlewares";
 import { ObjectId } from "mongoDb";
 
@@ -9,16 +8,37 @@ async function deleteExpense(event, context) {
     pathParameters: { id },
   } = event;
 
-  let res = null;
+  let _id = null;
 
   try {
-    res = await db.collection("expenses").deleteOne({ _id: ObjectId(id) });
+    _id = ObjectId(id);
   } catch (error) {
     console.error(error);
 
-    throw new createHttpError.InternalServerError(
-      "Error while deleting expense!"
-    );
+    return {
+      statusCode: 400,
+      body: "Invalid expense Id provided!",
+    };
+  }
+
+  let res = null;
+
+  try {
+    res = await db.collection("expenses").deleteOne({ _id });
+  } catch (error) {
+    console.error(error);
+
+    return {
+      statusCode: 500,
+      body: "Error while deleting Expense!",
+    };
+  }
+
+  if (!res || !res.acknowledged || res.deletedCount === 0) {
+    return {
+      statusCode: 404,
+      body: "No expense deleted!",
+    };
   }
 
   return {
