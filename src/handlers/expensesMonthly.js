@@ -3,7 +3,9 @@ import { commonMiddleware } from '../middlewares';
 
 async function expensesMonthly(event, context) {
   const { db } = context;
-  const { queryStringParameters: { year, month } } = event;
+  const {
+    queryStringParameters: { year, month },
+  } = event;
 
   let totals = [];
   try {
@@ -12,7 +14,8 @@ async function expensesMonthly(event, context) {
       new Date(year, month, 1).setMonth(new Date(year, month, 1).getMonth() + 1)
     );
 
-    totals = await db.collection('expenses')
+    totals = await db
+      .collection('expenses')
       .aggregate([
         {
           $match: {
@@ -28,8 +31,8 @@ async function expensesMonthly(event, context) {
             total: { $sum: '$amount' },
           },
         },
-      ]).toArray();
-
+      ])
+      .toArray();
   } catch (error) {
     console.error(error);
     throw new createHttpError.InternalServerError('Error while getting users!');

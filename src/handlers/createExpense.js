@@ -1,6 +1,6 @@
-import createHttpError from "http-errors";
-import { ObjectId } from "mongoDb";
-import { commonMiddleware } from "../middlewares";
+import createHttpError from 'http-errors';
+import { ObjectId } from 'mongoDb';
+import { commonMiddleware } from '../middlewares';
 
 async function createExpense(event, context) {
   const { db } = context;
@@ -19,7 +19,7 @@ async function createExpense(event, context) {
   const numberAmount = Number(amount);
 
   if (
-    typeof numberAmount !== "number" ||
+    typeof numberAmount !== 'number' ||
     isNaN(numberAmount) ||
     numberAmount <= 0
   ) {
@@ -30,7 +30,7 @@ async function createExpense(event, context) {
   const createdAt = new Date();
 
   try {
-    result = await db.collection("expenses").insertOne({
+    result = await db.collection('expenses').insertOne({
       amount: numberAmount,
       person: ObjectId(person),
       reason: ObjectId(reason),
@@ -38,12 +38,12 @@ async function createExpense(event, context) {
       createdAt,
     });
     if (!result || !result.insertedId) {
-      throw new Error("Not valid insert result!");
+      throw new Error('Not valid insert result!');
     }
   } catch (error) {
     console.error(error);
     throw new createHttpError.InternalServerError(
-      "Error while creating expense!"
+      'Error while creating expense!'
     );
   }
 

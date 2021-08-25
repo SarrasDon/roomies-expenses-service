@@ -12,7 +12,9 @@ async function count(event, context) {
     count = await db.collection('expenses').countDocuments();
   } catch (error) {
     console.error(error);
-    throw new createHttpError.InternalServerError('Error while getting expenses count!');
+    throw new createHttpError.InternalServerError(
+      'Error while getting expenses count!'
+    );
   }
 
   return {
@@ -22,5 +24,3 @@ async function count(event, context) {
 }
 
 export const handler = commonMiddleware(count);
-
-

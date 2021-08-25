@@ -2,7 +2,6 @@ import createHttpError from 'http-errors';
 import { commonMiddleware } from '../middlewares';
 
 async function expenseReasons(event, context) {
-
   const { db } = context;
 
   let reasons = [];
@@ -11,7 +10,9 @@ async function expenseReasons(event, context) {
     reasons = await db.collection('expensereasons').find({}).toArray();
   } catch (error) {
     console.error(error);
-    throw new createHttpError.InternalServerError('Error while getting expense reasons!');
+    throw new createHttpError.InternalServerError(
+      'Error while getting expense reasons!'
+    );
   }
 
   return {
@@ -21,5 +22,3 @@ async function expenseReasons(event, context) {
 }
 
 export const handler = commonMiddleware(expenseReasons);
-
-

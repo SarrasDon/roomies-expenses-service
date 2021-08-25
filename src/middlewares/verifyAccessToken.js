@@ -26,6 +26,6 @@ export default function verifyAccessToken() {
       const { payload: email, sub: userId } = verificationResult;
       context.email = email;
       context.userId = userId;
-    }
+    },
   };
-};
+}

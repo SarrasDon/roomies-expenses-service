@@ -6,14 +6,15 @@ async function totals(event, context) {
 
   let totals = [];
   try {
-    totals = await db.collection('expenses')
+    totals = await db
+      .collection('expenses')
       .aggregate([
         {
           $group: {
             _id: '$person',
-            total: { $sum: '$amount' }
-          }
-        }
+            total: { $sum: '$amount' },
+          },
+        },
       ])
       .toArray();
   } catch (error) {

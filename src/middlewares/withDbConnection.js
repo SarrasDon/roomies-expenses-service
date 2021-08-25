@@ -11,7 +11,7 @@ async function connectToDatabase() {
   // Connect to our MongoDB database hosted on MongoDB Atlas
   const client = await MongoClient.connect(MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   });
 
   cachedDb = client.db();
@@ -27,11 +27,13 @@ export default function withDbConnection() {
         db = await connectToDatabase();
       } catch (error) {
         console.error(error);
-        throw new createHttpError.InternalServerError('Error while connecting to db!');
+        throw new createHttpError.InternalServerError(
+          'Error while connecting to db!'
+        );
       }
 
       context.db = db;
       context.callbackWaitsForEmptyEventLoop = false;
-    }
+    },
   };
-};
+}

@@ -12,8 +12,8 @@ const commonMiddleware = (handler) => {
     .use(httpHeaderNormalizer())
     .use(verifyAccessToken())
     .use(withDbConnection())
-    .use(cors(
-      {
+    .use(
+      cors({
         origins: [
           'https://roomies.netlify.app',
           'https://roomies.netlify.com',
@@ -22,8 +22,8 @@ const commonMiddleware = (handler) => {
           'http://localhost:4200',
         ],
         credentials: true,
-      }
-    ))
+      })
+    )
     .use(httpErrorHandler());
 };
 
