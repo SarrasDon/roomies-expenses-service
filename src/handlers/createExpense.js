@@ -1,6 +1,10 @@
 import createHttpError from 'http-errors';
 import { ObjectId } from 'mongoDb';
 import { commonMiddleware } from '../middlewares';
+import { SQS } from 'aws-sdk';
+import { EXPENSES_QUEUE_URL } from '../config';
+
+const sqs = new SQS();
 
 async function createExpense(event, context) {
   const { db } = context;
@@ -45,6 +49,25 @@ async function createExpense(event, context) {
     throw new createHttpError.InternalServerError(
       'Error while creating expense!'
     );
+  }
+
+  try {
+    await sqs
+      .sendMessage({
+        QueueUrl: EXPENSES_QUEUE_URL,
+        MessageBody: JSON.stringify({
+          action: 'expense-created',
+          payload: {
+            amount: numberAmount,
+            person,
+            reason,
+            spendAt,
+          },
+        }),
+      })
+      .promise();
+  } catch (error) {
+    console.error(error);
   }
 
   return {

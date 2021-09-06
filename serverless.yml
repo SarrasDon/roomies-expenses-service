@@ -11,6 +11,11 @@ provider:
   stage: ${opt:stage, 'dev'}
   lambdaHashingVersion: 20201221
   region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource: ${self:custom.ExpensesQueue.arn}
 
 functions:
   count:
@@ -62,9 +67,21 @@ functions:
           method: POST
           path: /createExpense
 
+  createNotificationSub:
+    handler: src/handlers/createNotificationSub.handler
+    events:
+      - http:
+          method: POST
+          path: /createNotificationSub
+
   deleteExpense:
     handler: src/handlers/deleteExpense.handler
     events:
       - http:
           method: DELETE
           path: /deleteExpense/{id}
+
+custom:
+  ExpensesQueue:
+    arn: ${cf:roomies-notification-service-${self:provider.stage}.ExpensesQueueArn}
+    url: ${cf:roomies-notification-service-${self:provider.stage}.ExpensesQueueUrl}
